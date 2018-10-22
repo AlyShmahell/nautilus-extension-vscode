@@ -24,6 +24,6 @@ setup(
 	author='Aly Shmahell',
 	author_email='aly.shmahell@gmail.com',
 	license=license,
-	url='https://gitlab.com/AlyShmahell/AlyShmahell-Thesis',
+	url='https://github.com/AlyShmahell/nautilus-extension-vscode',
 	cmdclass={'install': customInstallClass}
 )
