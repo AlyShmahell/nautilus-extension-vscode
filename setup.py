@@ -1,5 +1,6 @@
 import platform
 import re
+import shutil
 import sys, os
 
 from setuptools import Extension, setup
