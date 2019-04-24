@@ -6,6 +6,10 @@ from setuptools import Extension, setup
 from setuptools.command.install import install
 from subprocess import call
 
+
+if type(shutil.which('code')) != str:
+	 raise Exception('Please install the official vscode, e.g.: sudo snap install code.')
+
 if sys.version_info < (3, 5):
 	raise Exception('Only Python 3.5 and above are supported.')
 	
@@ -16,7 +20,7 @@ class customInstallClass(install):
 	def run(self):
 		install.run(self)
 		os.system("chmod +x ./install.sh")
-		os.system("sh install.sh")
+		os.system("sh requirements.sh")
 	
 
 setup(
