@@ -19,7 +19,7 @@ with open('LICENSE', 'r') as legal:
 class customInstallClass(install):
 	def run(self):
 		install.run(self)
-		os.system("chmod +x ./install.sh")
+		os.system("chmod +x ./requirements.sh")
 		os.system("sh requirements.sh")
 	
 
