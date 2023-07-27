@@ -4,6 +4,22 @@ require_version('Nautilus', '3.0')
 from gi.repository import Nautilus, GObject
 from subprocess import call
 import os
+import subprocess 
+
+def is_flatpak_package_installed(package_name):
+    try:
+        output = subprocess.check_output(["flatpak", "info", package_name], stderr=subprocess.STDOUT, text=True)
+        return package_name in output
+    except subprocess.CalledProcessError:
+        return False
+        
+def is_apt_package_installed(package_name):
+    try:
+        output = subprocess.check_output(["apt", "list", package_name, '--installed'], stderr=subprocess.STDOUT, text=True)
+        return package_name in output
+    except subprocess.CalledProcessError:
+        return False
+
 
 class nautilusExtensionVSCode(GObject.GObject, Nautilus.MenuProvider):
 
@@ -11,7 +27,10 @@ class nautilusExtensionVSCode(GObject.GObject, Nautilus.MenuProvider):
         filepath = ''
         for file in files:
             filepath += '"' + file.get_location().get_path() + '" '
-        call('code' + ' --new-window ' + filepath + '&', shell=True)
+        if is_flatpak_package_installed('com.visualstudio.code'):
+            call('flatpak run com.visualstudio.code' + ' --new-window ' + filepath + '&', shell=True)
+        if is_apt_package_installed('code'):
+            call('code' + ' --new-window ' + filepath + '&', shell=True)
 
     def get_file_items(self, _, files):
         item = Nautilus.MenuItem(

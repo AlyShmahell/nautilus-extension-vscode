@@ -6,10 +6,29 @@ import sys, os
 from setuptools import Extension, setup
 from setuptools.command.install import install
 from subprocess import call
+import subprocess 
+
+def is_flatpak_package_installed(package_name):
+    try:
+        output = subprocess.check_output(["flatpak", "info", package_name], stderr=subprocess.STDOUT, text=True)
+        return package_name in output
+    except subprocess.CalledProcessError:
+        return False
+        
+def is_apt_package_installed(package_name):
+    try:
+        output = subprocess.check_output(["apt", "list", package_name, '--installed'], stderr=subprocess.STDOUT, text=True)
+        return package_name in output
+    except subprocess.CalledProcessError:
+        return False
 
 
-if type(shutil.which('code')) != str:
-	 raise Exception('Please install the official vscode, e.g.: sudo snap install code.')
+if (
+	not is_flatpak_package_installed('com.visualstudio.code') 
+		and
+	not is_apt_package_installed('rolldice')
+):
+	raise Exception('please install vscode first')
 
 if sys.version_info < (3, 5):
 	raise Exception('Only Python 3.5 and above are supported.')
